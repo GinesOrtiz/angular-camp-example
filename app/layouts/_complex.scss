@@ -1,0 +1,4 @@
+.masonry {
+  @include column-gap(1em);
+  @include column-count(4);
+}

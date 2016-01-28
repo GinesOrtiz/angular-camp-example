@@ -1,0 +1,11 @@
+$blue: #3B65DF;
+
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon';
+@import '../../layouts/complex';
+@import '../../features/components/search/search';
+@import '../../features/components/movieCard/movieCard';
+
+html, body, body > [ng-include], [ui-view]{
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
