@@ -1,6 +1,24 @@
 .movie-item {
-  background-color: #eee;
+  background-color: white;
   display: inline-block;
-  margin: 0 0 1em;
+  margin: 0 0 2em;
   width: 100%;
+  border-radius: 3px;
+  box-shadow: 0 7px 10px -5px rgba(black, 0.05);
+  //border: 1px solid rgba(black, .05);
+  .cover {
+    img {
+      width: 100%;
+    }
+  }
+  .card-info {
+    padding: 10px 0;
+    h3{
+      margin-top: 5px;
+      font-weight: 300;
+    }
+    p {
+      font-size: 14px;
+    }
+  }
 }

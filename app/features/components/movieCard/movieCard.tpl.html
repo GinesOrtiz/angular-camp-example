@@ -1,3 +1,20 @@
 <div class="movie-item">
-    <pre>{{movie | json}}</pre>
+    <div class="cover" ng-if="movie.poster_path">
+        <img ng-src="{{::imageThumb + movie.poster_path}}">
+    </div>
+    <div class="card-info">
+        <div class="col-md-12">
+            <div class="pull-left">
+                {{::movie.release_date}}
+            </div>
+            <div class="pull-right">
+                {{::movie.vote_average}}/10 <i class="zmdi zmdi-star"></i>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h3>{{::movie.title}}</h3>
+
+            <p>{{::movie.overview}}</p>
+        </div>
+    </div>
 </div>
