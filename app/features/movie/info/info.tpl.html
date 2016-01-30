@@ -1,1 +1,30 @@
-<pre>{{movie | json}}</pre>
+<div class="container" id="movieInfo">
+    <div class="col-md-3 basic-info">
+        <img ng-if="movie.poster_path" ng-src="{{imageLarge + movie.poster_path}}">
+        <div class="tag-zone text-center">
+            <span ng-class="{'Released' : 'label-success', 'In Production' : 'label-warning'}[movie.status]"
+                  class="label">{{::movie.status}}</span>
+        </div>
+    </div>
+    <div class="col-md-9 complete-info">
+        <div>
+            <h3>
+                <span>{{::movie.title}}</span>
+                <span ng-class="{'Released' : 'label-success', 'In Production' : 'label-warning'}[movie.status]"
+                      class="label">{{::movie.status}}</span>
+            </h3>
+            <div class="movie-voting">
+                <span class="label-warning label">
+                    {{::movie.vote_average}} <i class="zmdi zmdi-star"></i>
+                </span>
+                <span>
+                    {{::movie.release_date}}
+                </span>
+            </div>
+            <p class="overview">{{::movie.overview}}</p>
+        </div>
+        <div class="tag-zone">
+            <span class="label label-success" ng-repeat="genre in movie.genres">{{::genre.name}}</span>
+        </div>
+    </div>
+</div>

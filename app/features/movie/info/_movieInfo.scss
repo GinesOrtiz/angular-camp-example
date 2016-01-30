@@ -1,0 +1,51 @@
+#movieInfo {
+  padding-top: 50px;
+  color: white;
+  .basic-info {
+    img {
+      width: 100%;
+      display: block;
+      border-radius: 3px;
+    }
+    .tag-zone {
+      padding: 20px 0;
+      span {
+        margin-right: 10px;
+      }
+    }
+  }
+  .complete-info {
+    h3 {
+      font-size: 40px;
+      font-weight: 100;
+      color: white;
+      margin: 0;
+      > span{
+        vertical-align: middle;
+      }
+    }
+    .movie-voting {
+      display: block;
+      margin-bottom: 20px;
+      span {
+        margin: 5px 5px 5px 0;
+        padding: 3px 10px;
+      }
+    }
+    p.overview {
+      display: block;
+      font-weight: 300;
+      font-size: 18px;
+    }
+    .tag-zone {
+      span {
+        margin-right: 10px;
+      }
+    }
+  }
+  span.label {
+    padding: 5px 15px;
+    font-size: 14px;
+    font-weight: 300;
+  }
+}

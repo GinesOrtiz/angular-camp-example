@@ -55,7 +55,7 @@ gulp.task('js:compress', function () {
         .pipe(uglify({
             mangle: false        // Feature to replace original function names with sort ones (not working for now)
         }))
-        .pipe(gulp.dest('./app/assets/js/'))
+        .pipe(gulp.dest('./app/assets/js/'));
 });
 
 gulp.task('watch', function () {

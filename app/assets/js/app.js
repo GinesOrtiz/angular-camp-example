@@ -176,7 +176,6 @@ function tmpData($rootScope) {
             });
     }
 }());
-
 (function () {
     'use strict';
     angular
@@ -291,5 +290,7 @@ function tmpData($rootScope) {
     MovieInfoController.$invoke = ['$scope', 'movie'];
     function MovieInfoController($scope, movie) {
         $scope.movie = movie;
+        $scope.imageLarge = 'https://image.tmdb.org/t/p/w500';
+
     }
 }());
