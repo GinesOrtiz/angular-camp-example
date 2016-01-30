@@ -236,18 +236,6 @@ function tmpData($rootScope) {
 (function () {
     'use strict';
     angular
-        .module('angularJS-Vitamin.home')
-        .controller('MovieCardComponentController', MovieCardComponentController);
-
-    MovieCardComponentController.$invoke = ['$scope'];
-    function MovieCardComponentController($scope) {
-        $scope.imageThumb = 'https://image.tmdb.org/t/p/w500_and_h281_bestv2';
-        $scope.imageLarge = 'https://image.tmdb.org/t/p/w500';
-    }
-}());
-(function () {
-    'use strict';
-    angular
         .module('angularJS-Vitamin.components')
         .controller('SearchComponentController', SearchComponentController);
 
@@ -257,6 +245,18 @@ function tmpData($rootScope) {
         $scope.searchMovie = function () {
             $state.go('results', {query: $scope.movieTitle, page: 0});
         };
+    }
+}());
+(function () {
+    'use strict';
+    angular
+        .module('angularJS-Vitamin.home')
+        .controller('MovieCardComponentController', MovieCardComponentController);
+
+    MovieCardComponentController.$invoke = ['$scope'];
+    function MovieCardComponentController($scope) {
+        $scope.imageThumb = 'https://image.tmdb.org/t/p/w500_and_h281_bestv2';
+        $scope.imageLarge = 'https://image.tmdb.org/t/p/w500';
     }
 }());
 (function () {
@@ -291,6 +291,5 @@ function tmpData($rootScope) {
     function MovieInfoController($scope, movie) {
         $scope.movie = movie;
         $scope.imageLarge = 'https://image.tmdb.org/t/p/w500';
-
     }
 }());
