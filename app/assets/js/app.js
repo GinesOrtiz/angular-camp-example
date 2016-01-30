@@ -1,14 +1,17 @@
 'use strict';
+
 var apiBase = 'http://api.seriedb.com/';
 var apiPath = {
-    search: 'search/movie/:query/en/:page/all.js'
+    search: 'search/movie/:query/en/:page/all.js',
+    movieInfo: 'movie/info/:movieId/en/all.js',
+    movieGallery: 'movie/images/:movieId/en/all.js'
 };
 
 function buildURL(path, regex) {
     if (regex) {
         var finalUrl = apiPath[path];
-        angular.forEach(regex, function(param, key){
-            var regExp = new RegExp(':'+key);
+        angular.forEach(regex, function (param, key) {
+            var regExp = new RegExp(':' + key);
             finalUrl = finalUrl.replace(regExp, param);
         });
         return apiBase + finalUrl;
@@ -43,6 +46,7 @@ function tmpData($rootScope) {
             'ngSanitize',
 
             'angularJS-Vitamin.home',
+            'angularJS-Vitamin.movie',
             'angularJS-Vitamin.components'
         ])
         .config(appConfig)
@@ -138,6 +142,44 @@ function tmpData($rootScope) {
 (function () {
     'use strict';
     angular
+        .module('angularJS-Vitamin.movie', [])
+        .config(HomeConfig);
+
+    HomeConfig.$invoke = ['$stateProvider'];
+    function HomeConfig($stateProvider) {
+        $stateProvider
+            .state('movieInfo', {
+                url: '/movie/:id',
+                templateUrl: '/features/movie/info/info.tpl.html',
+                controller: 'MovieInfoController',
+                data: {
+                    template: 'complex'
+                },
+                resolve: {
+                    movie: function ($stateParams, MovieFactory) {
+                        return MovieFactory.getMovieInfo($stateParams.id);
+                    }
+                }
+            })
+            .state('movieGallery', {
+                url: '/movie/:id/gallery',
+                templateUrl: '/features/movie/gallery/gallery.tpl.html',
+                controller: 'MovieGalleryController',
+                data: {
+                    template: 'complex'
+                },
+                resolve: {
+                    images: function ($stateParams, MovieFactory) {
+                        return MovieFactory.getMovieGallery($stateParams.id);
+                    }
+                }
+            });
+    }
+}());
+
+(function () {
+    'use strict';
+    angular
         .module('angularJS-Vitamin.home')
         .factory('HomeFactory', HomeFactory);
 
@@ -148,6 +190,40 @@ function tmpData($rootScope) {
                 var dfd = $q.defer();
                 $http
                     .get(buildURL('search', {query: query, page: page + 1}))
+                    .then(function (response) {
+                        dfd.resolve(response.data);
+                    }, function (err) {
+                        dfd.reject(err);
+                    });
+                return dfd.promise;
+            }
+        };
+    }
+}());
+(function () {
+    'use strict';
+    angular
+        .module('angularJS-Vitamin.movie')
+        .factory('MovieFactory', MovieFactory);
+
+    MovieFactory.$invoke = ['$http', '$q'];
+    function MovieFactory($http, $q) {
+        return {
+            getMovieInfo: function (movieId) {
+                var dfd = $q.defer();
+                $http
+                    .get(buildURL('movieInfo', {movieId: movieId}))
+                    .then(function (response) {
+                        dfd.resolve(response.data);
+                    }, function (err) {
+                        dfd.reject(err);
+                    });
+                return dfd.promise;
+            },
+            getMovieGallery: function (movieId) {
+                var dfd = $q.defer();
+                $http
+                    .get(buildURL('movieGallery', {movieId: movieId}))
                     .then(function (response) {
                         dfd.resolve(response.data);
                     }, function (err) {
@@ -193,5 +269,27 @@ function tmpData($rootScope) {
     ResultsController.$invoke = ['$scope', 'results'];
     function ResultsController($scope, results) {
         $scope.results = results;
+    }
+}());
+(function () {
+    'use strict';
+    angular
+        .module('angularJS-Vitamin.movie')
+        .controller('MovieGalleryController', MovieGalleryController);
+
+    MovieGalleryController.$invoke = ['$scope', 'images'];
+    function MovieGalleryController($scope, images) {
+        $scope.images = images;
+    }
+}());
+(function () {
+    'use strict';
+    angular
+        .module('angularJS-Vitamin.movie')
+        .controller('MovieInfoController', MovieInfoController);
+
+    MovieInfoController.$invoke = ['$scope', 'movie'];
+    function MovieInfoController($scope, movie) {
+        $scope.movie = movie;
     }
 }());

@@ -1,14 +1,17 @@
 'use strict';
+
 var apiBase = 'http://api.seriedb.com/';
 var apiPath = {
-    search: 'search/movie/:query/en/:page/all.js'
+    search: 'search/movie/:query/en/:page/all.js',
+    movieInfo: 'movie/info/:movieId/en/all.js',
+    movieGallery: 'movie/images/:movieId/en/all.js'
 };
 
 function buildURL(path, regex) {
     if (regex) {
         var finalUrl = apiPath[path];
-        angular.forEach(regex, function(param, key){
-            var regExp = new RegExp(':'+key);
+        angular.forEach(regex, function (param, key) {
+            var regExp = new RegExp(':' + key);
             finalUrl = finalUrl.replace(regExp, param);
         });
         return apiBase + finalUrl;

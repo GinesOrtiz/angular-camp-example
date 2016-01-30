@@ -13,7 +13,8 @@
   "quotmark" : "single",
   "undef": true,
   "globals": {
-    "angular": true,
-    "navigator" : true
+    "angular": false,
+    "navigator" : false,
+    "buildURL" : false
   }
 }

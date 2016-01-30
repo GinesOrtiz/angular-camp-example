@@ -10,6 +10,7 @@
             'ngSanitize',
 
             'angularJS-Vitamin.home',
+            'angularJS-Vitamin.movie',
             'angularJS-Vitamin.components'
         ])
         .config(appConfig)

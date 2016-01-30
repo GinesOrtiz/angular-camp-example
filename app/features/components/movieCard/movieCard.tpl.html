@@ -1,6 +1,6 @@
-<div class="movie-item">
+<div class="movie-item" ui-sref="movieInfo({id:movie.id})">
     <div class="cover" ng-if="movie.poster_path">
-        <img ng-src="{{::imageThumb + movie.poster_path}}">
+        <img height="154" ng-src="{{::imageThumb + movie.poster_path}}">
     </div>
     <div class="card-info">
         <div class="col-md-12">
