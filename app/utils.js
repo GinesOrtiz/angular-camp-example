@@ -4,6 +4,7 @@ var apiBase = 'http://api.seriedb.com/';
 var apiPath = {
     search: 'search/movie/:query/en/:page/all.js',
     movieInfo: 'movie/info/:movieId/en/all.js',
+    movieSimilar: 'movie/similar/:movieId/en/all.js',
     movieGallery: 'movie/images/:movieId/en/all.js'
 };
 

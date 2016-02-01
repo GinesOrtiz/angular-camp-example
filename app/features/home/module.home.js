@@ -4,7 +4,7 @@
         .module('angularJS-Vitamin.home', [])
         .config(HomeConfig);
 
-    HomeConfig.$invoke = ['$stateProvider'];
+    HomeConfig.$inject = ['$stateProvider'];
     function HomeConfig($stateProvider) {
         $stateProvider
             .state('home', {

@@ -4,7 +4,7 @@
         .module('angularJS-Vitamin.movie', [])
         .config(HomeConfig);
 
-    HomeConfig.$invoke = ['$stateProvider'];
+    HomeConfig.$inject = ['$stateProvider'];
     function HomeConfig($stateProvider) {
         $stateProvider
             .state('movieInfo', {
@@ -20,16 +20,16 @@
                     }
                 }
             })
-            .state('movieGallery', {
-                url: '/movie/:id/gallery',
-                templateUrl: '/features/movie/gallery/gallery.tpl.html',
-                controller: 'MovieGalleryController',
+            .state('movieInfoComplex', {
+                url: '/movie/:id/all',
+                templateUrl: '/features/movie/infoComplex/infoComplex.tpl.html',
+                controller: 'MovieInfoComplexController',
                 data: {
                     template: 'complex'
                 },
                 resolve: {
-                    images: function ($stateParams, MovieFactory) {
-                        return MovieFactory.getMovieGallery($stateParams.id);
+                    movieInfo: function ($stateParams, MovieFactory) {
+                        return MovieFactory.getAllMovieInfo($stateParams.id);
                     }
                 }
             });

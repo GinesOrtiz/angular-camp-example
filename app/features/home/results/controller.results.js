@@ -4,7 +4,7 @@
         .module('angularJS-Vitamin.home')
         .controller('ResultsController', ResultsController);
 
-    ResultsController.$invoke = ['$scope', 'results'];
+    ResultsController.$inject = ['$scope', 'results'];
     function ResultsController($scope, results) {
         $scope.results = results;
     }

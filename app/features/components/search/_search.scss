@@ -16,7 +16,7 @@
     .search-box {
       width: 80%;
       margin: 0 auto;
-      .ng-valid {
+      .ng-valid.ng-dirty {
         .input-group {
           width: 100%;
           border-bottom: 2px solid $blue;

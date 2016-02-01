@@ -4,7 +4,7 @@
         .module('angularJS-Vitamin.movie')
         .controller('MovieInfoController', MovieInfoController);
 
-    MovieInfoController.$invoke = ['$scope', 'movie'];
+    MovieInfoController.$inject = ['$scope', 'movie'];
     function MovieInfoController($scope, movie) {
         $scope.movie = movie;
         $scope.imageLarge = 'https://image.tmdb.org/t/p/w500';

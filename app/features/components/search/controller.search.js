@@ -4,7 +4,7 @@
         .module('angularJS-Vitamin.components')
         .controller('SearchComponentController', SearchComponentController);
 
-    SearchComponentController.$invoke = ['$scope', '$state'];
+    SearchComponentController.$inject = ['$scope', '$state'];
     function SearchComponentController($scope, $state) {
         $scope.movieTitle = null;
         $scope.searchMovie = function () {

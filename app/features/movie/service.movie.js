@@ -4,30 +4,28 @@
         .module('angularJS-Vitamin.movie')
         .factory('MovieFactory', MovieFactory);
 
-    MovieFactory.$invoke = ['$http', '$q'];
+    MovieFactory.$inject = ['$http', '$q'];
     function MovieFactory($http, $q) {
         return {
             getMovieInfo: function (movieId) {
-                var dfd = $q.defer();
-                $http
+                return $http
                     .get(buildURL('movieInfo', {movieId: movieId}))
                     .then(function (response) {
-                        dfd.resolve(response.data);
-                    }, function (err) {
-                        dfd.reject(err);
+                        return response.data;
                     });
-                return dfd.promise;
             },
-            getMovieGallery: function (movieId) {
-                var dfd = $q.defer();
-                $http
-                    .get(buildURL('movieGallery', {movieId: movieId}))
+            getMovieSimilar: function (movieId) {
+                return $http
+                    .get(buildURL('movieSimilar', {movieId: movieId}))
                     .then(function (response) {
-                        dfd.resolve(response.data);
-                    }, function (err) {
-                        dfd.reject(err);
+                        return response.data;
                     });
-                return dfd.promise;
+            },
+            getAllMovieInfo: function (movieId) {
+                return $q.all({
+                    info: this.getMovieInfo(movieId),
+                    similar: this.getMovieSimilar(movieId)
+                });
             }
         };
     }

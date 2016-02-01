@@ -4,6 +4,7 @@ var apiBase = 'http://api.seriedb.com/';
 var apiPath = {
     search: 'search/movie/:query/en/:page/all.js',
     movieInfo: 'movie/info/:movieId/en/all.js',
+    movieSimilar: 'movie/similar/:movieId/en/all.js',
     movieGallery: 'movie/images/:movieId/en/all.js'
 };
 
@@ -53,7 +54,7 @@ function tmpData($rootScope) {
         .run(appRun);
 
 
-    appConfig.$invoke = ['$locationProvider', 'cfpLoadingBarProvider', '$urlRouterProvider'];
+    appConfig.$inject = ['$locationProvider', 'cfpLoadingBarProvider', '$urlRouterProvider'];
     function appConfig($locationProvider, cfpLoadingBarProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise(function ($injector) {
             var $state = $injector.get('$state');
@@ -68,7 +69,7 @@ function tmpData($rootScope) {
         cfpLoadingBarProvider.includeSpinner = false;
     }
 
-    appRun.$invoke = ['$rootScope'];
+    appRun.$inject = ['$rootScope'];
     function appRun($rootScope) {
         $rootScope.$on('$stateChangeSuccess', function (event, args) {
             $rootScope.layoutTemplate = {
@@ -113,7 +114,7 @@ function tmpData($rootScope) {
         .module('angularJS-Vitamin.home', [])
         .config(HomeConfig);
 
-    HomeConfig.$invoke = ['$stateProvider'];
+    HomeConfig.$inject = ['$stateProvider'];
     function HomeConfig($stateProvider) {
         $stateProvider
             .state('home', {
@@ -145,7 +146,7 @@ function tmpData($rootScope) {
         .module('angularJS-Vitamin.movie', [])
         .config(HomeConfig);
 
-    HomeConfig.$invoke = ['$stateProvider'];
+    HomeConfig.$inject = ['$stateProvider'];
     function HomeConfig($stateProvider) {
         $stateProvider
             .state('movieInfo', {
@@ -161,16 +162,16 @@ function tmpData($rootScope) {
                     }
                 }
             })
-            .state('movieGallery', {
-                url: '/movie/:id/gallery',
-                templateUrl: '/features/movie/gallery/gallery.tpl.html',
-                controller: 'MovieGalleryController',
+            .state('movieInfoComplex', {
+                url: '/movie/:id/all',
+                templateUrl: '/features/movie/infoComplex/infoComplex.tpl.html',
+                controller: 'MovieInfoComplexController',
                 data: {
                     template: 'complex'
                 },
                 resolve: {
-                    images: function ($stateParams, MovieFactory) {
-                        return MovieFactory.getMovieGallery($stateParams.id);
+                    movieInfo: function ($stateParams, MovieFactory) {
+                        return MovieFactory.getAllMovieInfo($stateParams.id);
                     }
                 }
             });
@@ -182,19 +183,15 @@ function tmpData($rootScope) {
         .module('angularJS-Vitamin.home')
         .factory('HomeFactory', HomeFactory);
 
-    HomeFactory.$invoke = ['$http', '$q'];
-    function HomeFactory($http, $q) {
+    HomeFactory.$inject = ['$http'];
+    function HomeFactory($http) {
         return {
             search: function (query, page) {
-                var dfd = $q.defer();
-                $http
+                return $http
                     .get(buildURL('search', {query: query, page: page + 1}))
                     .then(function (response) {
-                        dfd.resolve(response.data);
-                    }, function (err) {
-                        dfd.reject(err);
+                        return response.data;
                     });
-                return dfd.promise;
             }
         };
     }
@@ -205,32 +202,42 @@ function tmpData($rootScope) {
         .module('angularJS-Vitamin.movie')
         .factory('MovieFactory', MovieFactory);
 
-    MovieFactory.$invoke = ['$http', '$q'];
+    MovieFactory.$inject = ['$http', '$q'];
     function MovieFactory($http, $q) {
         return {
             getMovieInfo: function (movieId) {
-                var dfd = $q.defer();
-                $http
+                return $http
                     .get(buildURL('movieInfo', {movieId: movieId}))
                     .then(function (response) {
-                        dfd.resolve(response.data);
-                    }, function (err) {
-                        dfd.reject(err);
+                        return response.data;
                     });
-                return dfd.promise;
             },
-            getMovieGallery: function (movieId) {
-                var dfd = $q.defer();
-                $http
-                    .get(buildURL('movieGallery', {movieId: movieId}))
+            getMovieSimilar: function (movieId) {
+                return $http
+                    .get(buildURL('movieSimilar', {movieId: movieId}))
                     .then(function (response) {
-                        dfd.resolve(response.data);
-                    }, function (err) {
-                        dfd.reject(err);
+                        return response.data;
                     });
-                return dfd.promise;
+            },
+            getAllMovieInfo: function (movieId) {
+                return $q.all({
+                    info: this.getMovieInfo(movieId),
+                    similar: this.getMovieSimilar(movieId)
+                });
             }
         };
+    }
+}());
+(function () {
+    'use strict';
+    angular
+        .module('angularJS-Vitamin.home')
+        .controller('MovieCardComponentController', MovieCardComponentController);
+
+    MovieCardComponentController.$inject = ['$scope'];
+    function MovieCardComponentController($scope) {
+        $scope.imageThumb = 'https://image.tmdb.org/t/p/w500_and_h281_bestv2';
+        $scope.imageLarge = 'https://image.tmdb.org/t/p/w500';
     }
 }());
 (function () {
@@ -239,7 +246,7 @@ function tmpData($rootScope) {
         .module('angularJS-Vitamin.components')
         .controller('SearchComponentController', SearchComponentController);
 
-    SearchComponentController.$invoke = ['$scope', '$state'];
+    SearchComponentController.$inject = ['$scope', '$state'];
     function SearchComponentController($scope, $state) {
         $scope.movieTitle = null;
         $scope.searchMovie = function () {
@@ -251,21 +258,9 @@ function tmpData($rootScope) {
     'use strict';
     angular
         .module('angularJS-Vitamin.home')
-        .controller('MovieCardComponentController', MovieCardComponentController);
-
-    MovieCardComponentController.$invoke = ['$scope'];
-    function MovieCardComponentController($scope) {
-        $scope.imageThumb = 'https://image.tmdb.org/t/p/w500_and_h281_bestv2';
-        $scope.imageLarge = 'https://image.tmdb.org/t/p/w500';
-    }
-}());
-(function () {
-    'use strict';
-    angular
-        .module('angularJS-Vitamin.home')
         .controller('ResultsController', ResultsController);
 
-    ResultsController.$invoke = ['$scope', 'results'];
+    ResultsController.$inject = ['$scope', 'results'];
     function ResultsController($scope, results) {
         $scope.results = results;
     }
@@ -274,22 +269,24 @@ function tmpData($rootScope) {
     'use strict';
     angular
         .module('angularJS-Vitamin.movie')
-        .controller('MovieGalleryController', MovieGalleryController);
+        .controller('MovieInfoController', MovieInfoController);
 
-    MovieGalleryController.$invoke = ['$scope', 'images'];
-    function MovieGalleryController($scope, images) {
-        $scope.images = images;
+    MovieInfoController.$inject = ['$scope', 'movie'];
+    function MovieInfoController($scope, movie) {
+        $scope.movie = movie;
+        $scope.imageLarge = 'https://image.tmdb.org/t/p/w500';
     }
 }());
 (function () {
     'use strict';
     angular
         .module('angularJS-Vitamin.movie')
-        .controller('MovieInfoController', MovieInfoController);
+        .controller('MovieInfoComplexController', MovieInfoComplexController);
 
-    MovieInfoController.$invoke = ['$scope', 'movie'];
-    function MovieInfoController($scope, movie) {
-        $scope.movie = movie;
+    MovieInfoComplexController.$inject = ['$scope', 'movieInfo'];
+    function MovieInfoComplexController($scope, movieInfo) {
+        $scope.movie = movieInfo.info;
+        $scope.similar = movieInfo.similar;
         $scope.imageLarge = 'https://image.tmdb.org/t/p/w500';
     }
 }());

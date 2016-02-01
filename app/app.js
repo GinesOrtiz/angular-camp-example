@@ -17,7 +17,7 @@
         .run(appRun);
 
 
-    appConfig.$invoke = ['$locationProvider', 'cfpLoadingBarProvider', '$urlRouterProvider'];
+    appConfig.$inject = ['$locationProvider', 'cfpLoadingBarProvider', '$urlRouterProvider'];
     function appConfig($locationProvider, cfpLoadingBarProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise(function ($injector) {
             var $state = $injector.get('$state');
@@ -32,7 +32,7 @@
         cfpLoadingBarProvider.includeSpinner = false;
     }
 
-    appRun.$invoke = ['$rootScope'];
+    appRun.$inject = ['$rootScope'];
     function appRun($rootScope) {
         $rootScope.$on('$stateChangeSuccess', function (event, args) {
             $rootScope.layoutTemplate = {
